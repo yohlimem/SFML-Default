@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
@@ -30,6 +30,12 @@ namespace SFMLTutorial
             BackgroundColor = backgroundColor;
             Window = new RenderWindow(new VideoMode(width, height), windowTitle);
             this.GameTime = new GameTime();
+            Window.Closed += OnWindowClosed;
+        }
+
+        private void OnWindowClosed(object? sender, EventArgs e)
+        {
+            Window.Close();
         }
 
         public void Run()
