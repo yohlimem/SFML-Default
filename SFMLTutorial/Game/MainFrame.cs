@@ -18,7 +18,11 @@ namespace SFMLTutorial
 
         public override void Draw(GameTime gameTime)
         {
-
+            CircleShape rect = new CircleShape(55f);
+            rect.Origin = new Vector2f(rect.Radius, rect.Radius);
+            rect.Position = new Vector2f(DEFAULT_WINDOW_WIDTH / 2, DEFAULT_WINDOW_HEIGHT / 2);
+            rect.FillColor = Color.White;
+            Window.Draw(rect);
         }
 
         public override void Initialize()
