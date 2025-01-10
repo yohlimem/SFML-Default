@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
+using System.IO;
 
 namespace SFMLTutorial
 {
@@ -11,6 +12,9 @@ namespace SFMLTutorial
     {
         public const uint DEFAULT_WINDOW_WIDTH = 1920;
         public const uint DEFAULT_WINDOW_HEIGHT = 1080;
+
+        public Text text = new Text();
+        public Font font = new Font("./fonts/Arial.ttf");
         public MainFrame() : base(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "MAIN FRAM", Color.Black)
         {
 
@@ -23,6 +27,8 @@ namespace SFMLTutorial
             rect.Position = new Vector2f(DEFAULT_WINDOW_WIDTH / 2, DEFAULT_WINDOW_HEIGHT / 2);
             rect.FillColor = Color.White;
             Window.Draw(rect);
+            text.DisplayedString = "hi there";
+            Window.Draw(text);
         }
 
         public override void Initialize()
@@ -32,7 +38,7 @@ namespace SFMLTutorial
 
         public override void LoadContent()
         {
-
+            text.Font = (font);
         }
 
         public override void Update(GameTime gameTime)
