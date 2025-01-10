@@ -37,7 +37,7 @@ namespace SFMLTutorial
             LoadContent();
             Initialize();
 
-            float totalTimeBeforeUpdate = 0d;
+            float totalTimeBeforeUpdate = 0f;
             float previousTimeElapsed = 0f;
             float deltaTime = 0f;
             float totalTimeElapsed = 0f;
