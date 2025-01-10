@@ -42,7 +42,7 @@ namespace SFMLTutorial
             float deltaTime = 0f;
             float totalTimeElapsed = 0f;
 
-            Clock clock = new Clock;
+            Clock clock = new Clock();
 
             while (Window.IsOpen)
             {
