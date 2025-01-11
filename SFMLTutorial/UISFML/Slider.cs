@@ -4,7 +4,7 @@ using SFML.Graphics;
 
 namespace SFMLTutorial.UISFML
 {
-    public class Slider
+    public class Slider : UIElement
     {
         private Vector2f Position;
         private float AxisHeight;
@@ -13,14 +13,14 @@ namespace SFMLTutorial.UISFML
         private float SliderHeight;
         private RectangleShape Axis = new RectangleShape();
         private RectangleShape slider = new RectangleShape();
-        public float Value { get; private set; }
+        //public float Value { get; private set; }
         private float MinValue { get; }
         private float MaxValue { get; }
         bool IsPressed = false;
 
-        public Font font = new Font("./Fonts/Arial.ttf");
+        //public static Font font = new Font("./Fonts/Arial.ttf");
         public Text ValueDisplay = new Text();
-        public Text Title = new Text();
+        //public Text Title = new Text();
 
         public Slider(float x, float y, float width, float height, float value, float min, float max)
         {
@@ -78,7 +78,7 @@ namespace SFMLTutorial.UISFML
         }
 
 
-        void Logic(RenderWindow window)
+        protected override void Logic(RenderWindow window)
         {
             if (slider.GetGlobalBounds().Contains(Mouse.GetPosition(window).X, Mouse.GetPosition(window).Y) && Mouse.IsButtonPressed(Mouse.Button.Left) || IsPressed)
             {
@@ -127,7 +127,7 @@ namespace SFMLTutorial.UISFML
             return (MinValue + (((slider.Position.X - Axis.Position.X) / AxisWidth) * (MaxValue - MinValue)));
         }
 
-        public void Draw(RenderWindow window)
+        public override void Draw(RenderWindow window)
         {
             Logic(window);
             
