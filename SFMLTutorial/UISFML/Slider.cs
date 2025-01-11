@@ -170,9 +170,9 @@ namespace SFMLTutorial.UISFML
         public override void SetPosition(Vector2f position)
         {
 
-            Axis.Position = new Vector2f(Title.GetGlobalBounds().Size.X - 10, position.Y);
+            Axis.Position = new Vector2f(Title.GetGlobalBounds().Size.X + slider.Size.X, 0) + position;
             slider.Position = GetSliderPosition();
-            Title.Position = new Vector2f(-Title.GetGlobalBounds().Size.X - 10, -SliderHeight / 2) + Axis.Position;
+            Title.Position = new Vector2f(-Title.GetGlobalBounds().Size.X - slider.Size.X, -SliderHeight / 2) + Axis.Position;
             Position = position;
 
         }
