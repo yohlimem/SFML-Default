@@ -74,7 +74,6 @@ namespace SFMLTutorial.UISFML
             slider.Size = new Vector2f(sliderWidth, SliderHeight);
             slider.FillColor = new Color(192, 192, 192);
 
-            //Title.Origin = Title.GetGlobalBounds().Size / 2 + Title.GetLocalBounds().Position;
             Title.Position = new Vector2f(-Title.GetGlobalBounds().Size.X - 10, -SliderHeight / 2) + Axis.Position;
         }
 
@@ -86,8 +85,8 @@ namespace SFMLTutorial.UISFML
                 IsPressed = true;
                 //if (Mouse.GetPosition(window).X >= Position.X && Mouse.GetPosition(window).X <= Position.X + AxisWidth)
                 {
-                    slider.Position = new Vector2f(Math.Clamp(Mouse.GetPosition(window).X, Axis.Position.X, Axis.Position.X+MaxValue), Position.Y);
-                    Value = (MinValue + (((slider.Position.X - Axis.Position.X) / AxisWidth) * (MaxValue - MinValue)));
+                    slider.Position = new Vector2f(Math.Clamp(Mouse.GetPosition(window).X, Axis.Position.X, Axis.Position.X+AxisWidth), Position.Y);
+                    Value = GetValueFromAxisPosition();
                 }
             }
 
@@ -99,24 +98,20 @@ namespace SFMLTutorial.UISFML
 
         public void SetSliderValue(float newValue)
         {
-            if (newValue >= MinValue && newValue <= MaxValue)
-            {
-                Value = newValue;
-                float diff = MaxValue - MinValue;
-                float precentage = AxisWidth / diff;
-                float posX = precentage * -diff;
-                posX += Position.X;
-                slider.Position = new Vector2f(posX, Position.Y);
-            }
+
+            Value = Math.Clamp(newValue, MinValue, MaxValue);
+            slider.Position = GetSliderPosition();
+            
         }
+
+
 
         public void SetSliderPercentValue(float newPercentValue)
         {
-            if (newPercentValue >= 0 && newPercentValue <= 100)
-            {
-                Value = newPercentValue / 100 * MaxValue;
-                slider.Position = new Vector2f(Position.X + (AxisWidth * newPercentValue / 100), Position.Y);
-            }
+            float clampedPrecenet = Math.Clamp(newPercentValue, 0, 100);
+            Value = clampedPrecenet / 100 * MaxValue;
+            slider.Position = GetSliderPosition();
+            
         }
 
         private Vector2f GetSliderPosition()
@@ -127,20 +122,24 @@ namespace SFMLTutorial.UISFML
             return sliderMaxPos;
         }
 
+        public float GetValueFromAxisPosition()
+        {
+            return (MinValue + (((slider.Position.X - Axis.Position.X) / AxisWidth) * (MaxValue - MinValue)));
+        }
+
         public void Draw(RenderWindow window)
         {
             Logic(window);
             
             ValueDisplay.CharacterSize = 20;
-            ValueDisplay.Position = new Vector2f(Position.X - 10, Position.Y + 20);
+            ValueDisplay.Position = new Vector2f(AxisWidth + ValueDisplay.GetGlobalBounds().Size.X / 2, -AxisHeight / 2 + ValueDisplay.GetGlobalBounds().Size.Y / 2) + Axis.Position;
             ValueDisplay.DisplayedString = Value.ToString();
+
             window.Draw(ValueDisplay);
             window.Draw(Axis);
-            //window.Draw(returnText(Position.X + AxisWidth - 10, Position.Y + 5, MaxValue.ToString(), 20));
             window.Draw(slider);
             window.Draw(Title);
-            //window.Draw(returnText(slider.getPosition().x - sliderWidth, slider.getPosition().y - sliderHeight,
-            //    ((int)sliderValue), 15));
+
         }
 
     }
