@@ -1,14 +1,15 @@
 ﻿using SFML.Window;
 using SFML.System;
 using SFML.Graphics;
+using System.Diagnostics;
 
 namespace SFMLTutorial.UISFML
 {
     public class Slider : UIElement
     {
-        private Vector2f Position;
-        private float AxisHeight;
-        private float AxisWidth;
+        //private Vector2f Position;
+        //private float Height;
+        //private float Width;
         private float sliderWidth;
         private float SliderHeight;
         private RectangleShape Axis = new RectangleShape();
@@ -22,11 +23,9 @@ namespace SFMLTutorial.UISFML
         public Text ValueDisplay = new Text();
         //public Text Title = new Text();
 
-        public Slider(float x, float y, float width, float height, float value, float min, float max)
+        public Slider(float width, float height, float value, float min, float max) : base(width, height, 0, 0)
         {
-	        this.Position = new Vector2f(x,y);
-	        AxisHeight = height;
-	        AxisWidth = width;
+	        this.Position = new Vector2f(0,0);
 	        sliderWidth = 20;
 	        SliderHeight = height;
             Value = value;
@@ -38,9 +37,9 @@ namespace SFMLTutorial.UISFML
 
 
 
-            Axis.Position = new Vector2f(x, y);
-	        Axis.Origin = new Vector2f(0, AxisHeight / 2);
-	        Axis.Size = new Vector2f(AxisWidth, AxisHeight);
+            Axis.Position = new Vector2f(0,0);
+	        Axis.Origin = new Vector2f(0, Height / 2);
+	        Axis.Size = new Vector2f(Width, Height);
 	        Axis.FillColor = new Color(63,63,63);
             slider.Position = GetSliderPosition();
 	        slider.Origin = new Vector2f(sliderWidth / 2, SliderHeight / 2);
@@ -48,11 +47,9 @@ namespace SFMLTutorial.UISFML
 	        slider.FillColor = new Color(192,192,192);
         }
 
-        public Slider(float x, float y, float width, float height, float value, float min, float max, string title)
+        public Slider(float width, float height, float value, float min, float max, string title) : base(width, height, 0 ,0)
         {
-            this.Position = new Vector2f(x, y);
-            AxisHeight = height;
-            AxisWidth = width;
+            this.Position = new Vector2f(0,0);
             sliderWidth = 20;
             SliderHeight = height;
             Value = value;
@@ -65,9 +62,36 @@ namespace SFMLTutorial.UISFML
             
             Title.DisplayedString = title;
 
-            Axis.Position = new Vector2f(x + Title.GetGlobalBounds().Size.X - 10, y);
-            Axis.Origin = new Vector2f(0, AxisHeight / 2);
-            Axis.Size = new Vector2f(AxisWidth, AxisHeight);
+            Axis.Position = new Vector2f(Title.GetGlobalBounds().Size.X, Position.Y);
+            Axis.Origin = new Vector2f(0, Height / 2);
+            Axis.Size = new Vector2f(Width, Height);
+            Axis.FillColor = new Color(63, 63, 63);
+            slider.Position = GetSliderPosition();
+            slider.Origin = new Vector2f(sliderWidth / 2, SliderHeight / 2);
+            slider.Size = new Vector2f(sliderWidth, SliderHeight);
+            slider.FillColor = new Color(192, 192, 192);
+
+            Title.Position = new Vector2f(-Title.GetGlobalBounds().Size.X - 10, -SliderHeight / 2) + Axis.Position;
+        }
+        
+        public Slider(float width, float height, float paddidngHorizontal, float paddingVertical, float value, float min, float max, string title) : base(width, height, paddidngHorizontal, paddingVertical)
+        {
+            this.Position = new Vector2f(0,0);
+            sliderWidth = 20;
+            SliderHeight = height;
+            Value = value;
+            MinValue = min;
+            MaxValue = max;
+
+
+            ValueDisplay.Font = font;
+            Title.Font = font;
+            
+            Title.DisplayedString = title;
+
+            Axis.Position = new Vector2f(Title.GetGlobalBounds().Size.X, Position.Y);
+            Axis.Origin = new Vector2f(0, Height / 2);
+            Axis.Size = new Vector2f(Width, Height);
             Axis.FillColor = new Color(63, 63, 63);
             slider.Position = GetSliderPosition();
             slider.Origin = new Vector2f(sliderWidth / 2, SliderHeight / 2);
@@ -85,7 +109,7 @@ namespace SFMLTutorial.UISFML
                 IsPressed = true;
                 //if (Mouse.GetPosition(window).X >= Position.X && Mouse.GetPosition(window).X <= Position.X + AxisWidth)
                 {
-                    slider.Position = new Vector2f(Math.Clamp(Mouse.GetPosition(window).X, Axis.Position.X, Axis.Position.X+AxisWidth), Position.Y);
+                    slider.Position = new Vector2f(Math.Clamp(Mouse.GetPosition(window).X, Axis.Position.X, Axis.Position.X+Width), Axis.Position.Y);
                     Value = GetValueFromAxisPosition();
                 }
             }
@@ -106,6 +130,8 @@ namespace SFMLTutorial.UISFML
 
 
 
+
+
         public void SetSliderPercentValue(float newPercentValue)
         {
             float clampedPrecenet = Math.Clamp(newPercentValue, 0, 100);
@@ -118,21 +144,21 @@ namespace SFMLTutorial.UISFML
         {
             float precentage = Math.Clamp(Value, MinValue, MaxValue) / MaxValue;
             //Vector2f sliderMinPos = Axis.Position;
-            Vector2f sliderMaxPos = new Vector2f(Axis.Position.X + (AxisWidth * precentage), Position.Y);
+            Vector2f sliderMaxPos = new Vector2f(Axis.Position.X + (Axis.Size.X * precentage), Axis.Position.Y);
             return sliderMaxPos;
         }
 
         public float GetValueFromAxisPosition()
         {
-            return (MinValue + (((slider.Position.X - Axis.Position.X) / AxisWidth) * (MaxValue - MinValue)));
+            return (MinValue + (((slider.Position.X - Axis.Position.X) / Width) * (MaxValue - MinValue)));
         }
 
         public override void Draw(RenderWindow window)
         {
             Logic(window);
             
-            ValueDisplay.CharacterSize = 20;
-            ValueDisplay.Position = new Vector2f(AxisWidth + ValueDisplay.GetGlobalBounds().Size.X / 2, -AxisHeight / 2 + ValueDisplay.GetGlobalBounds().Size.Y / 2) + Axis.Position;
+            ValueDisplay.CharacterSize = 20; // TODO: FIX WEIRD JUMPING WITH TEXT
+            ValueDisplay.Position = new Vector2f(Width + ValueDisplay.GetGlobalBounds().Size.X / 2, -Height / 2 + ValueDisplay.GetGlobalBounds().Size.Y / 2) + Axis.Position;
             ValueDisplay.DisplayedString = Value.ToString();
 
             window.Draw(ValueDisplay);
@@ -141,6 +167,32 @@ namespace SFMLTutorial.UISFML
             window.Draw(Title);
 
         }
+        public override void SetPosition(Vector2f position)
+        {
 
+            Axis.Position = new Vector2f(Title.GetGlobalBounds().Size.X - 10, position.Y);
+            slider.Position = GetSliderPosition();
+            Title.Position = new Vector2f(-Title.GetGlobalBounds().Size.X - 10, -SliderHeight / 2) + Axis.Position;
+            Position = position;
+
+        }
+        public override float GetWidth()
+        {
+            return Width + (ValueDisplay.GetGlobalBounds().Size.X + Title.GetGlobalBounds().Size.X);
+        }
+        public override float GetHeight()
+        {
+            return Height;
+        }
+
+        public override uint GetPointCount()
+        {
+            return 8;
+        }
+
+        public override Vector2f GetPoint(uint index)
+        {
+            return Axis.Size / 2 + Axis.Position;
+        }
     }
 }
