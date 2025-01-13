@@ -157,8 +157,8 @@ namespace SFMLTutorial.UISFML
         {
             Logic(window);
             
-            ValueDisplay.CharacterSize = 20; // TODO: FIX WEIRD JUMPING WITH TEXT
-            ValueDisplay.Position = new Vector2f(Width + ValueDisplay.GetGlobalBounds().Size.X / 2, -Height / 2 + ValueDisplay.GetGlobalBounds().Size.Y / 2) + Axis.Position;
+            ValueDisplay.CharacterSize = 20;
+            ValueDisplay.Position = new Vector2f(Width + ValueDisplay.GetGlobalBounds().Size.X / 2 + 10, -Height / 2 + ValueDisplay.GetGlobalBounds().Size.Y / 2) + Axis.Position;
             ValueDisplay.DisplayedString = Value.ToString();
 
             window.Draw(ValueDisplay);
@@ -193,6 +193,32 @@ namespace SFMLTutorial.UISFML
         public override Vector2f GetPoint(uint index)
         {
             return Axis.Size / 2 + Axis.Position;
+        }
+
+        bool doOnce = false;
+        public override bool OnClicked()
+        {
+            if (IsDown() && !doOnce)
+            {
+                doOnce = true;
+                return true;
+            }
+            if (IsUp())
+            {
+                doOnce = false;
+                return false;
+            }
+            return false;
+        }
+
+        public override bool IsDown()
+        {
+            return IsPressed;
+        }
+
+        public override bool IsUp()
+        {
+            return !IsPressed;
         }
     }
 }

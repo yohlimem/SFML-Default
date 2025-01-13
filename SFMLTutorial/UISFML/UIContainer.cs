@@ -37,30 +37,47 @@ namespace SFMLTutorial.UISFML
                 element.SetPosition(new Vector2f(0, element.GetHeight()/2 + element.PaddingVertical / 2) + Position);
                 UIElements.Add(element);
 
-                UpdateSize(element);
+                AddSize(element);
 
                 return;
             }
 
-            UpdateSize(element);
+            AddSize(element);
 
             
 
             Size.Y += UIElements[^1].PaddingVertical;
 
 
-            element.SetPosition(new Vector2f(Position.X, UIElements[^1].GetHeight() + UIElements[^1].Position.Y + UIElements[^1].PaddingVertical + element.PaddingVertical / 2));
+            float nextPositionY = UIElements[^1].GetHeight() + UIElements[^1].Position.Y;
+            float paddingY = UIElements[^1].PaddingVertical / 2 + element.PaddingVertical / 2;
+
+
+            element.SetPosition(new Vector2f(Position.X, nextPositionY + paddingY));
 
             UIElements.Add(element);
             
         }
 
-        private void UpdateSize(UIElement element)
+        private void AddSize(UIElement element)
         {
-            Size.Y += element.GetHeight() + element.PaddingVertical / 2;
+            Size.Y += element.GetHeight() + element.PaddingVertical;
 
-            MaxWidth = Math.Max(MaxWidth, element.GetWidth());
-            Size.X = MaxWidth + element.PaddingHorizontal;
+            MaxWidth = Math.Max(MaxWidth, element.GetWidth() + element.PaddingHorizontal);
+            Size.X = MaxWidth;
+        }
+
+        public void UpdateSize()
+        {
+            Size.X = 0;
+            MaxWidth = 0;
+            foreach (UIElement element in UIElements)
+            {
+                MaxWidth = Math.Max(MaxWidth, element.GetWidth() + element.PaddingHorizontal);
+                Size.X = MaxWidth;
+
+            }
+
         }
 
         public void Draw(RenderWindow window)
@@ -71,10 +88,10 @@ namespace SFMLTutorial.UISFML
             rect.Position = Position - (Padding / 2);
             
             window.Draw(rect);
+            UpdateSize();
 
             foreach (UIElement element in UIElements)
             {
-
                 element.Draw(window);
             }
         }

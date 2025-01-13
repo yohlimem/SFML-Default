@@ -16,10 +16,13 @@ namespace SFMLTutorial.UISFML
         public Text Title { get; } = new Text();
         public static Font font = new Font("./Fonts/Arial.ttf");
         public dynamic Value { get; protected set; }
-        protected float Width { get; }
-        protected float Height { get; }
+        protected float Width { get; set; }
+        protected float Height { get; set; }
         public float PaddingHorizontal;
         public float PaddingVertical;
+
+        //private bool doOnce;
+
 
         protected UIElement(float width, float height, float paddingHorizontal, float paddingVertical)
         {
@@ -28,13 +31,23 @@ namespace SFMLTutorial.UISFML
             PaddingHorizontal = paddingHorizontal;
             PaddingVertical = paddingVertical;
             font = new Font("./Fonts/Arial.ttf");
+            Title.Font = font;
+        }
+        protected UIElement(float paddingHorizontal, float paddingVertical)
+        {
+            PaddingHorizontal = paddingHorizontal;
+            PaddingVertical = paddingVertical;
+            font = new Font("./Fonts/Arial.ttf");
+            Title.Font = font;
         }
 
         
         
         protected abstract void Logic(RenderWindow window);
         public abstract void Draw(RenderWindow window);
-
+        public abstract bool OnClicked();
+        public abstract bool IsDown();
+        public abstract bool IsUp();
         public virtual float GetWidth()
         {
             return Width + Title.GetGlobalBounds().Size.X / 2;
@@ -47,7 +60,7 @@ namespace SFMLTutorial.UISFML
 
         public virtual void SetPosition(Vector2f position)
         {
-            Title.Position = new Vector2f(-Title.GetGlobalBounds().Size.X - 10, -Height / 2) + Position;
+            Title.Position = new Vector2f(-Title.GetGlobalBounds().Size.X, -Height / 2) + Position;
             Position = position;
         }
         
