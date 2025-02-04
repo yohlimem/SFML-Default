@@ -34,7 +34,7 @@ namespace SFMLTutorial.UISFML
         {
 
             if (UIElements.Count == 0) {
-                element.SetPosition(new Vector2f(0, element.GetHeight()/2 + element.PaddingVertical / 2) + Position);
+                element.SetPosition(new Vector2f(0, element.GetHeight() / 2 + element.PaddingVertical / 2) + Position);
                 UIElements.Add(element);
 
                 AddSize(element);
@@ -54,6 +54,8 @@ namespace SFMLTutorial.UISFML
 
 
             element.SetPosition(new Vector2f(Position.X, nextPositionY + paddingY));
+
+            Debug.Print(element.GetType() + " " + element.GetHeight());
 
             UIElements.Add(element);
             

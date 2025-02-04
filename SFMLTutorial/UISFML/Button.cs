@@ -58,11 +58,12 @@ namespace SFMLTutorial.UISFML
 
             MarginHorizontal = marginHorizontal;
             MarginVertical = marginVertical;
+
+            body.Size = Title.GetGlobalBounds().Size + new Vector2f(MarginVertical, MarginHorizontal);
             
             Width = body.Size.X + marginHorizontal;
             Height = body.Size.Y + marginVertical;
            
-            body.Size = Title.GetGlobalBounds().Size + new Vector2f(MarginVertical, MarginHorizontal);
         }
 
 

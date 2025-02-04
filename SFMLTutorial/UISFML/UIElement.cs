@@ -13,7 +13,7 @@ namespace SFMLTutorial.UISFML
     public abstract class UIElement : Shape
     {
         public Vector2f Position { get; set; }
-        public Text Title { get; } = new Text();
+        protected Text Title { get; } = new Text();
         public static Font font = new Font("./Fonts/Arial.ttf");
         public dynamic Value { get; protected set; }
         protected float Width { get; set; }
